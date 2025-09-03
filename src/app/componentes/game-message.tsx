@@ -6,7 +6,7 @@ import { UI_MESSAGES } from "@/lib/consts";
 import { Loader } from "@/components/loader";
 
 export function GameMessage({ message }: { message: GameMessageType }) {
-  const { role, content, image, imageLoading } = message;
+  const { role, content, image, imageLoading, coinsEarned } = message;
 
   return (
     <Message from={role}>
@@ -42,6 +42,13 @@ export function GameMessage({ message }: { message: GameMessageType }) {
         <Response>
           {content}
         </Response>
+        
+        {role === 'assistant' && coinsEarned && coinsEarned > 0 && (
+          <div className="mt-2 inline-flex items-center gap-1 px-2 py-1 bg-yellow-100 dark:bg-yellow-900 rounded-lg text-sm">
+            <span>🪙</span>
+            <span>+{coinsEarned} monedas ganadas!</span>
+          </div>
+        )}
       </MessageContent>
     </Message>
   )

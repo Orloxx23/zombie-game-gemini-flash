@@ -14,6 +14,8 @@ ${historyText}
 
 El jugador acaba de decir: "${userMessage}"
 
+Si el mensaje del jugador comienza con "[Usar:", significa que está usando una acción especial (como arma, buscar, esconderse, etc.). Describe vívidamente cómo ejecuta esa acción y sus consecuencias en el mundo zombie.
+
 Continúa la historia basándote en la acción del jugador. Describe las consecuencias de manera dramática e inmersiva en MÁXIMO 2 párrafos cortos.
 
 Sé conciso y directo. Presenta la nueva situación y termina SIEMPRE invitando al jugador a participar activamente preguntándole qué quiere hacer, adónde quiere ir, qué observa, o qué acción tomar. Usa frases como "¿Qué decides hacer?", "¿Qué examinas primero?", "¿Cómo reaccionas?", "¿Hacia dónde te diriges?" para mantener al jugador involucrado en la aventura.

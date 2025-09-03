@@ -4,6 +4,32 @@ export interface GameMessage {
   content: string;
   image?: GeneratedImage;
   imageLoading?: boolean;
+  coinsEarned?: number;
+}
+
+export interface ShopItem {
+  id: string;
+  name: string;
+  icon: string;
+  price: number;
+  description: string;
+  effect: string;
+}
+
+export interface GameState {
+  coins: number;
+  inventory: ShopItem[];
+  health: number;
+  hunger: number;
+  thirst: number;
+  energy: number;
+  sanity: number;
+  maxHealth: number;
+  maxHunger: number;
+  maxThirst: number;
+  maxEnergy: number;
+  maxSanity: number;
+  isGameOver: boolean;
 }
 
 export interface GeneratedImage {
@@ -30,4 +56,25 @@ export interface GenerateImageRequest {
 export interface GenerateStoryResponse {
   narrative: string;
   imagePrompt: string;
+  coinsEarned?: number;
+  statChanges?: StatChanges;
+}
+
+export interface StatChanges {
+  health?: number;
+  hunger?: number;
+  thirst?: number;
+  energy?: number;
+  sanity?: number;
+}
+
+export interface CreativityCheckRequest {
+  userMessage: string;
+  conversationHistory: ConversationMessage[];
+}
+
+export interface CreativityCheckResponse {
+  isCreative: boolean;
+  coinsEarned: number;
+  reason: string;
 }
