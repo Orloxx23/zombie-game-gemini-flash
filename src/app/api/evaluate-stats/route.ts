@@ -1,11 +1,28 @@
-import { google } from '@ai-sdk/google';
-import { generateText } from 'ai';
-import { type NextRequest, NextResponse } from 'next/server';
-import type { StatChanges } from '@/lib/types';
+import { createGoogleGenerativeAI } from "@ai-sdk/google";
+import { generateText } from "ai";
+import { type NextRequest, NextResponse } from "next/server";
+import type { StatChanges } from "@/lib/types";
+import { getApiKey } from "@/lib/api-key";
 
 export async function POST(request: NextRequest) {
   try {
-    const { narrative, userAction } = await request.json();
+    const body = await request.json();
+    const apiKey = getApiKey() || body.apiKey;
+    if (!apiKey) {
+      return NextResponse.json({
+        health: -10,
+        hunger: -5,
+        thirst: -5,
+        energy: -5,
+        sanity: -3,
+      });
+    }
+
+    const google = createGoogleGenerativeAI({
+      apiKey,
+    });
+
+    const { narrative, userAction } = body;
 
     const prompt = `Eres un sistema experto en evaluar las consecuencias realistas de acciones en un apocalipsis zombie.
 
@@ -53,27 +70,29 @@ Responde SOLO en formato JSON:
   "sanity": número
 }`;
 
+    const model = google("gemini-2.5-flash-lite");
+
     const { text } = await generateText({
-      model: google('gemini-2.5-flash-lite'),
-      prompt
+      model,
+      prompt,
     });
-    
+
     const jsonMatch = text.match(/\{[\s\S]*\}/);
     if (!jsonMatch) {
-      throw new Error('Invalid response format');
+      throw new Error("Invalid response format");
     }
 
     const statChanges: StatChanges = JSON.parse(jsonMatch[0]);
-    
+
     return NextResponse.json(statChanges);
   } catch (error) {
-    console.error('Error evaluating stats:', error);
-    return NextResponse.json({ 
-      health: -10, 
-      hunger: -5, 
-      thirst: -5, 
-      energy: -5, 
-      sanity: -3 
+    console.error("Error evaluating stats:", error);
+    return NextResponse.json({
+      health: -10,
+      hunger: -5,
+      thirst: -5,
+      energy: -5,
+      sanity: -3,
     });
   }
 }

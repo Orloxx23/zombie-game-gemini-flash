@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import React from "react";
 import {
   Conversation,
   ConversationContent,
@@ -12,11 +13,13 @@ import { GameMessage } from "./componentes/game-message";
 import { GameShop } from "./componentes/game-shop";
 import { GameStats } from "./componentes/game-stats";
 import { useZombieGame } from "./hooks/use-zombie-game";
-import { Image } from "@/components/image";
+import { useApiKey } from "./hooks/use-api-key";
+import { ApiKeyForm } from "./componentes/api-key-form";
 import GameBackground from "./componentes/game-background";
 import GameSuggestions from "./componentes/game-suggestions";
 
 export default function Home() {
+  const { hasApiKey, isLoading: apiKeyLoading, setApiKey } = useApiKey();
   const {
     messages,
     input,
@@ -32,12 +35,44 @@ export default function Home() {
   } = useZombieGame();
   const [showShop, setShowShop] = useState(false);
 
+  // Iniciar juego automáticamente si hay API key y no hay mensajes
+  useEffect(() => {
+    if (hasApiKey && messages.length === 0 && !isLoading) {
+      startGame();
+    }
+  }, [hasApiKey, messages.length, isLoading]);
+
+  const handleApiKeySubmit = async (apiKey: string) => {
+    const success = await setApiKey(apiKey);
+    if (success) {
+      // Iniciar el juego inmediatamente después de configurar la API key
+      startGame();
+    }
+  };
+
+  if (apiKeyLoading) {
+    return (
+      <div className="font-sans h-screen mx-auto overflow-hidden relative">
+        <GameBackground image={messages[messages.length - 1]?.image} />
+        <div className="flex flex-col h-full items-center justify-center">
+          <img src="/logo.webp" className="size-64 animate-pulse" />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="font-sans h-screen mx-auto overflow-hidden ">
       <GameBackground image={messages[messages.length - 1]?.image} />
       <div className="flex flex-col h-full">
+        {!hasApiKey && (
+          <div className="w-full h-screen absolute top-0 left-0 z-20 flex flex-col pt-[5%] items-center">
+            <ApiKeyForm onApiKeySubmit={handleApiKeySubmit} />
+          </div>
+        )}
+
         <Conversation>
-          <ConversationContent className="max-w-xl mx-auto pb-[20rem] lg:pb-[14rem]">
+          <ConversationContent className="max-w-xl mx-auto pb-[21rem] lg:pb-[15rem]">
             {messages.map((message) => (
               <GameMessage key={message.id} message={message} />
             ))}
@@ -61,7 +96,6 @@ export default function Home() {
                           cancelable: true,
                         });
                         form.dispatchEvent(event);
-                        
                       }
                     }, 100);
                   }}

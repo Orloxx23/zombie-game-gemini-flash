@@ -1,11 +1,19 @@
-import { useState, useEffect, use } from 'react';
-import type { GameMessage, ConversationMessage, GenerateStoryResponse, GameState, ShopItem, CreativityCheckResponse, StatChanges } from '@/lib/types';
-import { getItemById } from '@/lib/shop-items';
+import { useState, useEffect, use } from "react";
+import type {
+  GameMessage,
+  ConversationMessage,
+  GenerateStoryResponse,
+  GameState,
+  ShopItem,
+  CreativityCheckResponse,
+  StatChanges,
+} from "@/lib/types";
+import { getItemById } from "@/lib/shop-items";
 
 export function useZombieGame() {
-  const [messages, setMessages] = useState<GameMessage[]>([])
-  const [input, setInput] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
+  const [messages, setMessages] = useState<GameMessage[]>([]);
+  const [input, setInput] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const [gameState, setGameState] = useState<GameState>({
     coins: 10,
     inventory: [],
@@ -20,206 +28,239 @@ export function useZombieGame() {
     maxEnergy: 100,
     maxSanity: 100,
     isGameOver: false,
-    suggestions: []
-  })
-  
-  useEffect(() => {
-    startGame()
-  }, [])
+    suggestions: [],
+  });
 
   // Sistema de pérdida progresiva de vida por hambre/sed
   useEffect(() => {
     const interval = setInterval(() => {
-      setGameState(prev => {
+      setGameState((prev) => {
         if (prev.isGameOver) return prev;
-        
+
         let healthLoss = 0;
         if (prev.hunger <= 0) healthLoss += 2;
         if (prev.thirst <= 0) healthLoss += 3;
-        
+
         if (healthLoss > 0) {
           const newHealth = Math.max(0, prev.health - healthLoss);
           return {
             ...prev,
             health: newHealth,
-            isGameOver: newHealth <= 0
+            isGameOver: newHealth <= 0,
           };
         }
-        
+
         return prev;
       });
     }, 3000); // Cada 3 segundos
-    
+
     return () => clearInterval(interval);
-  }, [])
+  }, []);
 
   const startGame = async () => {
-    setIsLoading(true)
+    setIsLoading(true);
 
     try {
-      const response = await fetch('/api/generate-story', {
-        method: 'POST',
-        body: JSON.stringify({ isStart: true })
-      })
+      const tempApiKey = localStorage.getItem("temp_api_key");
+      
+      const response = await fetch("/api/generate-story", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ isStart: true, apiKey: tempApiKey }),
+      });
 
       if (!response.ok) {
-        throw new Error('Failed to generate story')
+        throw new Error("Failed to generate story");
       }
-  
-      const data = await response.json() as GenerateStoryResponse
 
-      const messageId = crypto.randomUUID()
+      const data = (await response.json()) as GenerateStoryResponse;
+
+      const messageId = crypto.randomUUID();
 
       const newMessage: GameMessage = {
         id: messageId,
-        role: 'assistant',
+        role: "assistant",
         content: data.narrative,
-        imageLoading: true
-      }
+        imageLoading: true,
+      };
 
-      setMessages([newMessage])
-      
+      setMessages([newMessage]);
+
       // Actualizar sugerencias si están disponibles
       if (data.suggestions) {
-        setGameState(prev => ({ ...prev, suggestions: data.suggestions || [] }))
+        setGameState((prev) => ({
+          ...prev,
+          suggestions: data.suggestions || [],
+        }));
       }
-      
-      generateImage(messageId, data.imagePrompt)
+
+      generateImage(messageId, data.imagePrompt);
     } catch (error) {
-      console.error('Error generating story:', error)
+      console.error("Error generating story:", error);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   const generateImage = async (messageId: string, imagePrompt: string) => {
     try {
-      const response = await fetch('/api/generate-image', {
-        method: 'POST',
+      const tempApiKey = localStorage.getItem("temp_api_key");
+      
+      const response = await fetch("/api/generate-image", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          imagePrompt: imagePrompt
-        })
-      })
-  
+          imagePrompt: imagePrompt,
+          apiKey: tempApiKey,
+        }),
+      });
+
       if (!response.ok) {
-        throw new Error('Failed to generate image')
+        throw new Error("Failed to generate image");
       }
-  
-      const imageData = await response.json()
-  
-      setMessages(prevMessages => prevMessages.map(message => {
-        if (message.id === messageId) {
-          return { ...message, image: imageData.image, imageLoading: false }
-        }
-  
-        return message
-      }))
+
+      const imageData = await response.json();
+
+      setMessages((prevMessages) =>
+        prevMessages.map((message) => {
+          if (message.id === messageId) {
+            return { ...message, image: imageData.image, imageLoading: false };
+          }
+
+          return message;
+        })
+      );
     } catch (error) {
-      setMessages(prevMessages => prevMessages.map(message => {
-        if (message.id === messageId) {
-          return { ...message, imageLoading: false }
-        }
+      setMessages((prevMessages) =>
+        prevMessages.map((message) => {
+          if (message.id === messageId) {
+            return { ...message, imageLoading: false };
+          }
 
-        return message
-      }))
+          return message;
+        })
+      );
     }
-  }
+  };
 
-  const checkCreativity = async (userMessage: string, conversationHistory: GameMessage[]): Promise<CreativityCheckResponse> => {
+  const checkCreativity = async (
+    userMessage: string,
+    conversationHistory: GameMessage[]
+  ): Promise<CreativityCheckResponse> => {
     try {
-      const response = await fetch('/api/check-creativity', {
-        method: 'POST',
+      const tempApiKey = localStorage.getItem("temp_api_key");
+      
+      const response = await fetch("/api/check-creativity", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           userMessage,
-          conversationHistory: conversationHistory.map(msg => ({ role: msg.role, content: msg.content }))
-        })
+          conversationHistory: conversationHistory.map((msg) => ({
+            role: msg.role,
+            content: msg.content,
+          })),
+          apiKey: tempApiKey,
+        }),
       });
-      
-      if (!response.ok) throw new Error('Failed to check creativity');
+
+      if (!response.ok) throw new Error("Failed to check creativity");
       return await response.json();
     } catch (error) {
-      return { isCreative: false, coinsEarned: 1, reason: 'Error' };
+      return { isCreative: false, coinsEarned: 1, reason: "Error" };
     }
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    if (!input.trim() || isLoading) return
+    e.preventDefault();
+    if (!input.trim() || isLoading) return;
 
     const userMessage: GameMessage = {
       id: crypto.randomUUID(),
-      role: 'user',
-      content: input
-    }
+      role: "user",
+      content: input,
+    };
 
-    setIsLoading(true)
-    const currentInput = input
-    setInput('')
-    setGameState(prev => ({ ...prev, suggestions: [] }))
-    setMessages(prevMessages => [...prevMessages, userMessage])
+    setIsLoading(true);
+    const currentInput = input;
+    setInput("");
+    setGameState((prev) => ({ ...prev, suggestions: [] }));
+    setMessages((prevMessages) => [...prevMessages, userMessage]);
 
     try {
       // Evaluar creatividad
       const creativityCheck = await checkCreativity(currentInput, messages);
 
-      const response = await fetch('/api/generate-story', {
-        method: 'POST',
+      const tempApiKey = localStorage.getItem("temp_api_key");
+      
+      const response = await fetch("/api/generate-story", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           userMessage: currentInput,
           conversationHistory: messages,
           isStart: false,
-          playerStats: gameState
-        })
-      })
+          playerStats: gameState,
+          apiKey: tempApiKey,
+        }),
+      });
 
       if (!response.ok) {
-        throw new Error('Failed to generate story')
+        throw new Error("Failed to generate story");
       }
 
-      const data = await response.json() as GenerateStoryResponse
-      
+      const data = (await response.json()) as GenerateStoryResponse;
+
       // Evaluar cambios de estadísticas
       const statChanges = await evaluateStats(data.narrative, currentInput);
-      
-      const messageId = crypto.randomUUID()
+
+      const messageId = crypto.randomUUID();
 
       const assistantMessage: GameMessage = {
         id: messageId,
-        role: 'assistant',
+        role: "assistant",
         content: data.narrative,
         imageLoading: true,
-        coinsEarned: creativityCheck.coinsEarned
-      }
+        coinsEarned: creativityCheck.coinsEarned,
+      };
 
       // Actualizar estadísticas y monedas
       updateGameStats(creativityCheck.coinsEarned, statChanges);
-      
+
       // Actualizar sugerencias si están disponibles
       if (data.suggestions) {
-        setGameState(prev => ({ ...prev, suggestions: data.suggestions || [] }))
+        setGameState((prev) => ({
+          ...prev,
+          suggestions: data.suggestions || [],
+        }));
       }
 
-      setMessages(prevMessages => [...prevMessages, assistantMessage])
-      generateImage(messageId, data.imagePrompt)
+      setMessages((prevMessages) => [...prevMessages, assistantMessage]);
+      generateImage(messageId, data.imagePrompt);
     } catch (error) {
-      console.error('Error generating story:', error)
+      console.error("Error generating story:", error);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setInput(e.target.value)
-  }
+    setInput(e.target.value);
+  };
 
-  const evaluateStats = async (narrative: string, userAction: string): Promise<StatChanges> => {
+  const evaluateStats = async (
+    narrative: string,
+    userAction: string
+  ): Promise<StatChanges> => {
     try {
-      const response = await fetch('/api/evaluate-stats', {
-        method: 'POST',
-        body: JSON.stringify({ narrative, userAction })
-      });
+      const tempApiKey = localStorage.getItem("temp_api_key");
       
-      if (!response.ok) throw new Error('Failed to evaluate stats');
+      const response = await fetch("/api/evaluate-stats", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ narrative, userAction, apiKey: tempApiKey }),
+      });
+
+      if (!response.ok) throw new Error("Failed to evaluate stats");
       return await response.json();
     } catch (error) {
       return { health: 0, hunger: -5, thirst: -5, energy: -3, sanity: 0 };
@@ -227,41 +268,58 @@ export function useZombieGame() {
   };
 
   const updateGameStats = (coinsEarned: number, statChanges: StatChanges) => {
-    setGameState(prev => {
+    setGameState((prev) => {
       const newStats = {
         ...prev,
         coins: prev.coins + coinsEarned,
-        health: Math.max(0, Math.min(prev.maxHealth, prev.health + (statChanges.health || 0))),
-        hunger: Math.max(0, Math.min(prev.maxHunger, prev.hunger + (statChanges.hunger || 0))),
-        thirst: Math.max(0, Math.min(prev.maxThirst, prev.thirst + (statChanges.thirst || 0))),
-        energy: Math.max(0, Math.min(prev.maxEnergy, prev.energy + (statChanges.energy || 0))),
-        sanity: Math.max(0, Math.min(prev.maxSanity, prev.sanity + (statChanges.sanity || 0)))
+        health: Math.max(
+          0,
+          Math.min(prev.maxHealth, prev.health + (statChanges.health || 0))
+        ),
+        hunger: Math.max(
+          0,
+          Math.min(prev.maxHunger, prev.hunger + (statChanges.hunger || 0))
+        ),
+        thirst: Math.max(
+          0,
+          Math.min(prev.maxThirst, prev.thirst + (statChanges.thirst || 0))
+        ),
+        energy: Math.max(
+          0,
+          Math.min(prev.maxEnergy, prev.energy + (statChanges.energy || 0))
+        ),
+        sanity: Math.max(
+          0,
+          Math.min(prev.maxSanity, prev.sanity + (statChanges.sanity || 0))
+        ),
       };
-      
+
       // Verificar condiciones de game over
       if (newStats.health <= 0) {
         newStats.isGameOver = true;
         newStats.health = 0;
       }
-      
+
       return newStats;
     });
   };
 
   const buyItem = (item: ShopItem) => {
     if (gameState.coins >= item.price) {
-      setGameState(prev => {
+      setGameState((prev) => {
         const newState = {
           ...prev,
-          coins: prev.coins - item.price
+          coins: prev.coins - item.price,
         };
-        
+
         if (item.consumable) {
           // Aplicar efectos inmediatamente para consumibles
           Object.entries(item.statEffects).forEach(([stat, value]) => {
             if (value && stat in newState) {
               (newState as any)[stat] = Math.min(
-                (newState as any)[`max${stat.charAt(0).toUpperCase() + stat.slice(1)}`],
+                (newState as any)[
+                  `max${stat.charAt(0).toUpperCase() + stat.slice(1)}`
+                ],
                 (newState as any)[stat] + value
               );
             }
@@ -270,7 +328,7 @@ export function useZombieGame() {
           // Agregar al inventario para items permanentes
           newState.inventory = [...prev.inventory, item];
         }
-        
+
         return newState;
       });
       return true;
@@ -280,38 +338,43 @@ export function useZombieGame() {
 
   const useItem = (itemId: string) => {
     const item = getItemById(itemId);
-    if (!item || !gameState.inventory.find(inv => inv.id === itemId)) return false;
-    
-    setGameState(prev => {
+    if (!item || !gameState.inventory.find((inv) => inv.id === itemId))
+      return false;
+
+    setGameState((prev) => {
       const newState = { ...prev };
-      
+
       // Aplicar efectos del item
       Object.entries(item.statEffects).forEach(([stat, value]) => {
         if (value && stat in newState) {
           (newState as any)[stat] = Math.min(
-            (newState as any)[`max${stat.charAt(0).toUpperCase() + stat.slice(1)}`],
+            (newState as any)[
+              `max${stat.charAt(0).toUpperCase() + stat.slice(1)}`
+            ],
             (newState as any)[stat] + value
           );
         }
       });
-      
+
       // Remover item del inventario si es consumible
       if (item.consumable) {
-        const itemIndex = newState.inventory.findIndex(inv => inv.id === itemId);
+        const itemIndex = newState.inventory.findIndex(
+          (inv) => inv.id === itemId
+        );
         if (itemIndex > -1) {
           newState.inventory.splice(itemIndex, 1);
         }
       }
-      
+
       return newState;
     });
-    
+
     return true;
   };
 
   const restartGame = () => {
     setMessages([]);
-    setInput('');
+    setInput("");
     setIsLoading(false);
     setGameState({
       coins: 10,
@@ -327,10 +390,22 @@ export function useZombieGame() {
       maxEnergy: 100,
       maxSanity: 100,
       isGameOver: false,
-      suggestions: []
+      suggestions: [],
     });
     startGame();
   };
 
-  return { messages, input, setInput, isLoading, gameState, startGame, handleSubmit, handleInputChange, buyItem, useItem, restartGame }
+  return {
+    messages,
+    input,
+    setInput,
+    isLoading,
+    gameState,
+    startGame,
+    handleSubmit,
+    handleInputChange,
+    buyItem,
+    useItem,
+    restartGame,
+  };
 }

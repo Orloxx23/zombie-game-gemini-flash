@@ -40,14 +40,24 @@ export default function GameBackground({
         />
       )}
 
-      <Image
-        base64={currentImage?.base64Data || ""}
-        mediaType={currentImage?.mediaType || ""}
-        uint8Array={new Uint8Array()}
-        className={`size-full object-cover transition-opacity duration-500 ${
-          showNew ? "opacity-100" : "opacity-0"
-        }`}
-      />
+      {currentImage?.base64Data ? (
+        <Image
+          base64={currentImage.base64Data}
+          mediaType={currentImage.mediaType || ""}
+          uint8Array={new Uint8Array()}
+          className={`size-full object-cover transition-opacity duration-500 ${
+            showNew ? "opacity-100" : "opacity-0"
+          }`}
+        />
+      ) : (
+        <img
+          src="/bg.webp"
+          alt="Default background"
+          className={`size-full object-cover transition-opacity duration-500 ${
+            showNew ? "opacity-100" : "opacity-0"
+          }`}
+        />
+      )}
     </div>
   );
 }

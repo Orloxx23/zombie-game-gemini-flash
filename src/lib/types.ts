@@ -1,6 +1,6 @@
 export interface GameMessage {
   id: string;
-  role: 'user' | 'assistant';
+  role: "user" | "assistant";
   content: string;
   image?: GeneratedImage;
   imageLoading?: boolean;
@@ -42,8 +42,8 @@ export interface GeneratedImage {
 }
 
 export interface ConversationMessage {
-  role: 'user' | 'assistant';
-  content: string
+  role: "user" | "assistant";
+  content: string;
 }
 
 export interface GenerateStoryRequest {
