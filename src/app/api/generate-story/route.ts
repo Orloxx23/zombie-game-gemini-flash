@@ -9,7 +9,7 @@ import { GenerateStoryRequest } from '@/lib/types';
 
 export async function POST(request: NextRequest) {
   try {
-    const { userMessage, conversationHistory, isStart }: GenerateStoryRequest = await request.json();
+    const { userMessage, conversationHistory, isStart, playerStats }: GenerateStoryRequest = await request.json();
 
     let prompt: string = GAME_PROMPTS.INITIAL_STORY;
 
@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
         (message) => `${message.role}: ${message.content}`
       ).join('\n');
 
-      prompt = GAME_PROMPTS.CONTINUE_STORY(historyText, userMessage);
+      prompt = GAME_PROMPTS.CONTINUE_STORY(historyText, userMessage, playerStats);
     }
 
     const { text } = await generateText({

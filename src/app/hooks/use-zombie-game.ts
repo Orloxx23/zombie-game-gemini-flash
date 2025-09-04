@@ -133,7 +133,8 @@ export function useZombieGame() {
         body: JSON.stringify({
           userMessage: currentInput,
           conversationHistory: messages,
-          isStart: false
+          isStart: false,
+          playerStats: gameState
         })
       })
 

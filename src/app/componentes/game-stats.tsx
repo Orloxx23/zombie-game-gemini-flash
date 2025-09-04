@@ -59,7 +59,7 @@ export function GameStats({ gameState, onRestart }: GameStatsProps) {
   }
 
   return (
-    <div className="bg-white dark:bg-gray-800 border rounded-lg p-3 space-y-3">
+    <div className="bg-background/25 backdrop-blur-sm border rounded-xl p-3 space-y-3">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
         <StatBar
           label="Salud"

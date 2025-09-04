@@ -30,7 +30,7 @@ export function GameInput({
   const inputSubmitIsDisabled = isLoading || inputTrimmed === "";
 
   return (
-    <PromptInput onSubmit={onSubmit} className="relative">
+    <PromptInput onSubmit={onSubmit} className="relative bg-background/25 backdrop-blur-sm">
       <PromptInputTextarea
         placeholder={UI_MESSAGES.PLACEHOLDERS.INPUT}
         value={input}
@@ -39,7 +39,7 @@ export function GameInput({
       />
       <PromptInputToolbar>
         <PromptInputTools>
-          <div className="flex items-center gap-1 px-2 py-1 bg-yellow-100 dark:bg-yellow-900 rounded-md">
+          <div className="flex items-center ml-0.5 gap-1 px-2 py-1 bg-yellow-100 dark:bg-yellow-900 rounded-md">
             <span>🪙</span>
             <span className="text-sm font-medium">{gameState.coins}</span>
           </div>

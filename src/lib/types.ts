@@ -14,6 +14,8 @@ export interface ShopItem {
   price: number;
   description: string;
   effect: string;
+  statEffects: StatChanges;
+  consumable: boolean;
 }
 
 export interface GameState {
@@ -47,6 +49,7 @@ export interface GenerateStoryRequest {
   userMessage: string;
   conversationHistory: ConversationMessage[];
   isStart: boolean;
+  playerStats?: GameState;
 }
 
 export interface GenerateImageRequest {
