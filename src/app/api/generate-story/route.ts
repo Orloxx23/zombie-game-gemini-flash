@@ -26,9 +26,17 @@ export async function POST(request: NextRequest) {
       prompt
     })
 
-    const [narrative, imagePrompt] = text.split(GAME_CONFIG.IMAGE.SEPARATOR);
+    const parts = text.split(GAME_CONFIG.IMAGE.SEPARATOR);
+    const narrative = parts[0];
+    const remainingText = parts[1] || '';
+    
+    const imageParts = remainingText.split(GAME_CONFIG.SUGGESTIONS.SEPARATOR);
+    const imagePrompt = imageParts[0]?.trim() || '';
+    const suggestionsText = imageParts[1]?.trim() || '';
+    
+    const suggestions = suggestionsText ? suggestionsText.split('|').map(s => s.trim()).filter(s => s) : [];
 
-    return NextResponse.json({ narrative, imagePrompt });
+    return NextResponse.json({ narrative, imagePrompt, suggestions });
     
   } catch (error) {
     console.error('Error generating story:', error);

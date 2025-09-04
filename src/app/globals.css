@@ -131,3 +131,7 @@
 p + p {
   margin-top: 16px;
 }
+
+* {
+  scrollbar-width: none;
+}

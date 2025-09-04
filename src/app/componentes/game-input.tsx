@@ -30,16 +30,20 @@ export function GameInput({
   const inputSubmitIsDisabled = isLoading || inputTrimmed === "";
 
   return (
-    <PromptInput onSubmit={onSubmit} className="relative bg-background/25 backdrop-blur-sm">
+    <PromptInput
+      id="game-input"
+      onSubmit={onSubmit}
+      className="relative bg-background/50 backdrop-blur-sm"
+    >
       <PromptInputTextarea
         placeholder={UI_MESSAGES.PLACEHOLDERS.INPUT}
         value={input}
         onChange={onInputChange}
         disabled={isLoading}
       />
-      <PromptInputToolbar>
+      <PromptInputToolbar className="border-t w-full">
         <PromptInputTools>
-          <div className="flex items-center ml-0.5 gap-1 px-2 py-1 bg-yellow-100 dark:bg-yellow-900 rounded-md">
+          <div className="flex items-center ml-0.5 gap-1 px-2 py-1 rounded-md">
             <span>🪙</span>
             <span className="text-sm font-medium">{gameState.coins}</span>
           </div>

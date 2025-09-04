@@ -18,7 +18,7 @@ export function GameShop({ gameState, onBuyItem, onClose }: GameShopProps) {
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-md w-full mx-4 max-h-[80vh] overflow-y-auto">
+      <div className="bg-background border rounded-lg p-6 max-w-4xl w-full mx-4 max-h-[80vh] overflow-y-auto">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-bold">🏪 Tienda</h2>
           <Button variant="ghost" size="sm" onClick={onClose}>✕</Button>
@@ -43,7 +43,7 @@ export function GameShop({ gameState, onBuyItem, onClose }: GameShopProps) {
           </div>
         )}
 
-        <div className="space-y-3">
+        <div className="space-y-3 grid grid-cols-1 sm:grid-cols-2 gap-4">
           {SHOP_ITEMS.map((item) => {
             const owned = !item.consumable && gameState.inventory.some(inv => inv.id === item.id)
             const canAfford = gameState.coins >= item.price

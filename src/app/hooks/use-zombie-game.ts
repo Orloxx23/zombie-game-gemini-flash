@@ -19,7 +19,8 @@ export function useZombieGame() {
     maxThirst: 100,
     maxEnergy: 100,
     maxSanity: 100,
-    isGameOver: false
+    isGameOver: false,
+    suggestions: []
   })
   
   useEffect(() => {
@@ -51,6 +52,12 @@ export function useZombieGame() {
       }
 
       setMessages([newMessage])
+      
+      // Actualizar sugerencias si están disponibles
+      if (data.suggestions) {
+        setGameState(prev => ({ ...prev, suggestions: data.suggestions || [] }))
+      }
+      
       generateImage(messageId, data.imagePrompt)
     } catch (error) {
       console.error('Error generating story:', error)
@@ -122,6 +129,7 @@ export function useZombieGame() {
     setIsLoading(true)
     const currentInput = input
     setInput('')
+    setGameState(prev => ({ ...prev, suggestions: [] }))
     setMessages(prevMessages => [...prevMessages, userMessage])
 
     try {
@@ -159,6 +167,11 @@ export function useZombieGame() {
 
       // Actualizar estadísticas y monedas
       updateGameStats(creativityCheck.coinsEarned, statChanges);
+      
+      // Actualizar sugerencias si están disponibles
+      if (data.suggestions) {
+        setGameState(prev => ({ ...prev, suggestions: data.suggestions || [] }))
+      }
 
       setMessages(prevMessages => [...prevMessages, assistantMessage])
       generateImage(messageId, data.imagePrompt)
@@ -290,10 +303,11 @@ export function useZombieGame() {
       maxThirst: 100,
       maxEnergy: 100,
       maxSanity: 100,
-      isGameOver: false
+      isGameOver: false,
+      suggestions: []
     });
     startGame();
   };
 
-  return { messages, input, isLoading, gameState, startGame, handleSubmit, handleInputChange, buyItem, useItem, restartGame }
+  return { messages, input, setInput, isLoading, gameState, startGame, handleSubmit, handleInputChange, buyItem, useItem, restartGame }
 }

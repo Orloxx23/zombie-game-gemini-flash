@@ -32,6 +32,7 @@ export interface GameState {
   maxEnergy: number;
   maxSanity: number;
   isGameOver: boolean;
+  suggestions: string[];
 }
 
 export interface GeneratedImage {
@@ -61,6 +62,7 @@ export interface GenerateStoryResponse {
   imagePrompt: string;
   coinsEarned?: number;
   statChanges?: StatChanges;
+  suggestions?: string[];
 }
 
 export interface StatChanges {

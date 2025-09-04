@@ -13,11 +13,11 @@ export function GameMessage({ message }: { message: GameMessageType }) {
       <MessageContent>
         {
           role === 'assistant' && (
-            <picture className="w-full max-w-2xl aspect-video overflow-hidden rounded-md">
+            <picture className="w-full max-w-2xl aspect-video overflow-hidden rounded-md bg-border">
               {
                 imageLoading && (
-                  <div className="w-full h-full flex items-center justify-center bg-black/10">
-                    <div className="flex mb-4 space-x-2">
+                  <div className="w-full h-full flex items-center justify-center bg-border animate-pulse">
+                    <div className="flex mb-4 space-x-2 opacity-50">
                       <Loader />
                       <span>{UI_MESSAGES.LOADING.IMAGE}</span>
                     </div>
