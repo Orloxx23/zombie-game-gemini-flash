@@ -1,5 +1,3 @@
-'use client';
-
 import type { GameState } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";

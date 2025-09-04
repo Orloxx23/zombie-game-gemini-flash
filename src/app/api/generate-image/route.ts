@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
       }
     })
 
-    console.log('Generated images: ', files)
+    // console.log('Generated images: ', files)
 
     return NextResponse.json({ image: files[0] || null });
     

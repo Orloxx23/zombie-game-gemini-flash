@@ -47,25 +47,27 @@ export default function Home() {
           <ConversationScrollButton className="mb-[20rem] lg:mb-[14rem] bg-background/50 backdrop-blur-sm" />
 
           <div className="absolute bottom-0 w-full px-3">
-            <div className="max-w-2xl w-full mx-auto mb-2">
-              <GameSuggestions
-                suggestions={gameState.suggestions}
-                onSuggestionClick={(suggestion) => {
-                  setInput(suggestion);
-                  setTimeout(() => {
-                    const form = document.querySelector("#game-input");
-                    if (form) {
-                      const event = new Event("submit", {
-                        bubbles: true,
-                        cancelable: true,
-                      });
-                      form.dispatchEvent(event);
-                      
-                    }
-                  }, 100);
-                }}
-              />
-            </div>
+            {!gameState.isGameOver && (
+              <div className="max-w-2xl w-full mx-auto mb-2">
+                <GameSuggestions
+                  suggestions={gameState.suggestions}
+                  onSuggestionClick={(suggestion) => {
+                    setInput(suggestion);
+                    setTimeout(() => {
+                      const form = document.querySelector("#game-input");
+                      if (form) {
+                        const event = new Event("submit", {
+                          bubbles: true,
+                          cancelable: true,
+                        });
+                        form.dispatchEvent(event);
+                        
+                      }
+                    }, 100);
+                  }}
+                />
+              </div>
+            )}
 
             <div className="max-w-2xl w-full mx-auto mb-2">
               <GameStats gameState={gameState} onRestart={restartGame} />

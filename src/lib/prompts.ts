@@ -35,6 +35,7 @@ IMPORTANTE - ADAPTA LA NARRATIVA AL ESTADO DEL JUGADOR:
 - Si está agotado: describe cansancio, movimientos lentos, necesidad de descanso
 - Si tiene baja cordura: añade alucinaciones, paranoia, miedo irracional
 - Si tiene items: permite usarlos de manera creativa en la situación
+- Si tiene la salud en 0: el jugador muere y el juego termina
 
 Continúa la historia basándote en la acción del jugador Y su estado físico/mental. Describe las consecuencias de manera dramática e inmersiva en MÁXIMO 2 párrafos cortos.
 

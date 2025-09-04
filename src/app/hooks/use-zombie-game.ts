@@ -27,6 +27,32 @@ export function useZombieGame() {
     startGame()
   }, [])
 
+  // Sistema de pérdida progresiva de vida por hambre/sed
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setGameState(prev => {
+        if (prev.isGameOver) return prev;
+        
+        let healthLoss = 0;
+        if (prev.hunger <= 0) healthLoss += 2;
+        if (prev.thirst <= 0) healthLoss += 3;
+        
+        if (healthLoss > 0) {
+          const newHealth = Math.max(0, prev.health - healthLoss);
+          return {
+            ...prev,
+            health: newHealth,
+            isGameOver: newHealth <= 0
+          };
+        }
+        
+        return prev;
+      });
+    }, 3000); // Cada 3 segundos
+    
+    return () => clearInterval(interval);
+  }, [])
+
   const startGame = async () => {
     setIsLoading(true)
 
@@ -214,9 +240,6 @@ export function useZombieGame() {
       
       // Verificar condiciones de game over
       if (newStats.health <= 0) {
-        newStats.isGameOver = true;
-        newStats.health = 0; // Asegurar que no sea negativo
-      } else if ((newStats.hunger <= 0 && newStats.health <= 30) || (newStats.thirst <= 0 && newStats.health <= 25)) {
         newStats.isGameOver = true;
         newStats.health = 0;
       }

@@ -44,9 +44,9 @@ export function GameMessage({ message }: { message: GameMessageType }) {
         </Response>
         
         {role === 'assistant' && coinsEarned && coinsEarned > 0 && (
-          <div className="mt-2 inline-flex items-center gap-1 px-2 py-1 bg-yellow-100 dark:bg-yellow-900 rounded-lg text-sm">
+          <div className="mt-2 inline-flex items-center justify-end gap-0 text-xs">
             <span>🪙</span>
-            <span>+{coinsEarned} monedas ganadas!</span>
+            <span>+{coinsEarned}</span>
           </div>
         )}
       </MessageContent>

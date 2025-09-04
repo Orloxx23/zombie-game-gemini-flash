@@ -1,6 +1,5 @@
 import { Message, MessageContent } from "@/components/message";
-import { Loader } from '@/components/loader';
-
+import { Loader } from "@/components/loader";
 
 export function GameLoader() {
   return (
@@ -12,5 +11,5 @@ export function GameLoader() {
         </div>
       </MessageContent>
     </Message>
-  )
+  );
 }
