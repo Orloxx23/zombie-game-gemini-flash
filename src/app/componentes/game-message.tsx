@@ -5,7 +5,6 @@ import { Image } from "@/components/image";
 import { UI_MESSAGES } from "@/lib/consts";
 import { Loader } from "@/components/loader";
 import { useRef, useEffect } from "react";
-import GameMessageActions from "./game-message-actions";
 
 export function GameMessage({
   message,
@@ -25,7 +24,7 @@ export function GameMessage({
   }, [onObserve, message.id]);
 
   return (
-    <div ref={messageRef} className="separate-y-0">
+    <div ref={messageRef}>
       <Message from={role}>
         <MessageContent>
           {role === "assistant" && (
@@ -61,7 +60,6 @@ export function GameMessage({
           )}
         </MessageContent>
       </Message>
-      {role === "assistant" && <GameMessageActions text={content} />}
     </div>
   );
 }

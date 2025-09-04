@@ -5,7 +5,6 @@ import { type NextRequest, NextResponse } from "next/server";
 
 import { GAME_PROMPTS } from "@/lib/prompts";
 import { GAME_CONFIG } from "@/lib/consts";
-import { GenerateStoryRequest } from "@/lib/types";
 import { getApiKey } from "@/lib/api-key";
 
 interface ConversationMessage {
