@@ -17,6 +17,7 @@ import { useApiKey } from "./hooks/use-api-key";
 import { ApiKeyForm } from "./componentes/api-key-form";
 import GameBackground from "./componentes/game-background";
 import GameSuggestions from "./componentes/game-suggestions";
+import { useVisibleMessage } from "./hooks/use-visible-message";
 
 export default function Home() {
   const { hasApiKey, isLoading: apiKeyLoading, setApiKey } = useApiKey();
@@ -34,6 +35,7 @@ export default function Home() {
     restartGame,
   } = useZombieGame();
   const [showShop, setShowShop] = useState(false);
+  const { visibleMessage, observeMessage } = useVisibleMessage(messages);
 
   // Iniciar juego automáticamente si hay API key y no hay mensajes
   useEffect(() => {
@@ -53,7 +55,7 @@ export default function Home() {
   if (apiKeyLoading) {
     return (
       <div className="font-sans h-screen mx-auto overflow-hidden relative">
-        <GameBackground image={messages[messages.length - 1]?.image} />
+        <GameBackground image={visibleMessage?.image || messages[messages.length - 1]?.image} />
         <div className="flex flex-col h-full items-center justify-center">
           <img src="/logo.webp" className="size-64 animate-pulse" />
         </div>
@@ -63,7 +65,7 @@ export default function Home() {
 
   return (
     <div className="font-sans h-screen mx-auto overflow-hidden ">
-      <GameBackground image={messages[messages.length - 1]?.image} />
+      <GameBackground image={visibleMessage?.image || messages[messages.length - 1]?.image} />
       <div className="flex flex-col h-full">
         {!hasApiKey && (
           <div className="w-full h-screen absolute top-0 left-0 z-20 flex flex-col pt-[5%] items-center">
@@ -74,7 +76,11 @@ export default function Home() {
         <Conversation>
           <ConversationContent className="max-w-xl mx-auto pb-[21rem] lg:pb-[15rem]">
             {messages.map((message) => (
-              <GameMessage key={message.id} message={message} />
+              <GameMessage 
+                key={message.id} 
+                message={message} 
+                onObserve={observeMessage}
+              />
             ))}
             {isLoading && <GameLoader />}
           </ConversationContent>

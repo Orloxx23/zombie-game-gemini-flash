@@ -4,12 +4,28 @@ import { type GameMessage as GameMessageType } from "@/lib/types";
 import { Image } from "@/components/image";
 import { UI_MESSAGES } from "@/lib/consts";
 import { Loader } from "@/components/loader";
+import { useRef, useEffect } from "react";
 
-export function GameMessage({ message }: { message: GameMessageType }) {
+export function GameMessage({ 
+  message, 
+  onObserve 
+}: { 
+  message: GameMessageType;
+  onObserve?: (element: HTMLElement | null, messageId: string) => void;
+}) {
   const { role, content, image, imageLoading, coinsEarned } = message;
 
+  const messageRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (onObserve && messageRef.current) {
+      onObserve(messageRef.current, message.id);
+    }
+  }, [onObserve, message.id]);
+
   return (
-    <Message from={role}>
+    <div ref={messageRef}>
+      <Message from={role}>
       <MessageContent>
         {
           role === 'assistant' && (
@@ -51,5 +67,6 @@ export function GameMessage({ message }: { message: GameMessageType }) {
         )}
       </MessageContent>
     </Message>
+    </div>
   )
 }
