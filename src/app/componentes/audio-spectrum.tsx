@@ -8,7 +8,7 @@ interface AudioSpectrumProps {
 
 export default function AudioSpectrum({ analyser, isPlaying, onClick }: AudioSpectrumProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const animationRef = useRef<number>();
+  const animationRef = useRef<number | null>(null);
 
   useEffect(() => {
     if (!canvasRef.current) return;
