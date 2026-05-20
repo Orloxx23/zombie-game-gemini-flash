@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Zombie Apocalypse Game",
-  description: "Zombie Apocalypse Game",
+  title: "Encuentros",
+  description: "Aventura interactiva de seducción para adultos",
 };
 
 export default function RootLayout({

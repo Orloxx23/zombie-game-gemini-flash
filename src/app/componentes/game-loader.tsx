@@ -7,7 +7,7 @@ export function GameLoader() {
       <MessageContent>
         <div className="flex items-center gap-2">
           <Loader />
-          Cargando historia...
+          Escribiendo la escena...
         </div>
       </MessageContent>
     </Message>

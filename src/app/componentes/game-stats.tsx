@@ -1,10 +1,8 @@
 import type { GameState } from "@/lib/types";
-import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 interface GameStatsProps {
   gameState: GameState;
-  onRestart?: () => void;
 }
 
 interface StatBarProps {
@@ -56,68 +54,51 @@ function StatBar({
   );
 }
 
-export function GameStats({ gameState, onRestart }: GameStatsProps) {
-  if (gameState.isGameOver) {
-    return (
-      <div className="bg-red-100 dark:bg-red-900 border border-red-300 dark:border-red-700 rounded-lg p-4 text-center">
-        <div className="text-2xl mb-2">💀</div>
-        <div className="text-red-800 dark:text-red-200 font-bold">
-          GAME OVER
-        </div>
-        <div className="text-red-600 dark:text-red-400 text-sm mt-1 mb-3">
-          No has logrado sobrevivir al apocalipsis zombie
-        </div>
-        <Button onClick={onRestart} variant="destructive">
-          🎮 Jugar de nuevo
-        </Button>
-      </div>
-    );
-  }
-
+export function GameStats({ gameState }: GameStatsProps) {
   return (
     <div className="bg-background/50 backdrop-blur-sm border rounded-xl p-3 space-y-3">
       <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-5 gap-3">
         <StatBar
-          label="Salud"
-          icon="❤️"
-          current={gameState.health}
-          max={gameState.maxHealth}
-          color="bg-red-500"
+          label="Atracción"
+          icon="💖"
+          current={gameState.attraction}
+          max={gameState.maxAttraction}
+          color="bg-pink-500"
           dangerThreshold={25}
           className="w-full span-col-2 lg:col-span-1"
         />
         <StatBar
-          label="Hambre"
-          icon="🍖"
-          current={gameState.hunger}
-          max={gameState.maxHunger}
-          color="bg-orange-500"
-          dangerThreshold={20}
+          label="Deseo"
+          icon="🔥"
+          current={gameState.desire}
+          max={gameState.maxDesire}
+          color="bg-red-500"
+          dangerThreshold={0}
           className="w-full col-span-1"
         />
         <StatBar
-          label="Sed"
-          icon="💧"
-          current={gameState.thirst}
-          max={gameState.maxThirst}
-          color="bg-blue-500"
-          dangerThreshold={15}
-          className="w-full col-span-1"
-        />
-        <StatBar
-          label="Energía"
+          label="Tensión"
           icon="⚡"
-          current={gameState.energy}
-          max={gameState.maxEnergy}
+          current={gameState.tension}
+          max={gameState.maxTension}
           color="bg-yellow-500"
+          dangerThreshold={0}
+          className="w-full col-span-1"
+        />
+        <StatBar
+          label="Resistencia"
+          icon="💪"
+          current={gameState.stamina}
+          max={gameState.maxStamina}
+          color="bg-green-500"
           dangerThreshold={20}
           className="w-full col-span-1"
         />
         <StatBar
-          label="Cordura"
-          icon="🧠"
-          current={gameState.sanity}
-          max={gameState.maxSanity}
+          label="Química"
+          icon="✨"
+          current={gameState.chemistry}
+          max={gameState.maxChemistry}
           color="bg-purple-500"
           dangerThreshold={30}
           className="w-full col-span-1"

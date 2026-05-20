@@ -5,6 +5,9 @@ export interface GameMessage {
   image?: GeneratedImage;
   imageLoading?: boolean;
   coinsEarned?: number;
+  newDiscoveries?: string[];
+  actAdvanced?: boolean;
+  statChanges?: StatChanges;
 }
 
 export interface ShopItem {
@@ -18,21 +21,49 @@ export interface ShopItem {
   consumable: boolean;
 }
 
+export interface CharacterProfile {
+  name: string;
+  appearance: string;
+  personality: string;
+  background: string;
+  secret: string;
+  kink: string;
+  dealbreaker: string;
+  setting: string;
+}
+
+export interface SceneObjective {
+  act: 1 | 2 | 3;
+  title: string;
+  hint: string;
+}
+
+export type EndingType =
+  | "ignored"
+  | "one_night"
+  | "romance"
+  | "intense"
+  | "objective_completed";
+
 export interface GameState {
   coins: number;
   inventory: ShopItem[];
-  health: number;
-  hunger: number;
-  thirst: number;
-  energy: number;
-  sanity: number;
-  maxHealth: number;
-  maxHunger: number;
-  maxThirst: number;
-  maxEnergy: number;
-  maxSanity: number;
+  attraction: number;
+  desire: number;
+  tension: number;
+  stamina: number;
+  chemistry: number;
+  maxAttraction: number;
+  maxDesire: number;
+  maxTension: number;
+  maxStamina: number;
+  maxChemistry: number;
   isGameOver: boolean;
   suggestions: string[];
+  character: CharacterProfile | null;
+  objective: SceneObjective | null;
+  discoveries: string[];
+  ending: EndingType | null;
 }
 
 export interface GeneratedImage {
@@ -60,26 +91,19 @@ export interface GenerateImageRequest {
 export interface GenerateStoryResponse {
   narrative: string;
   imagePrompt: string;
-  coinsEarned?: number;
-  statChanges?: StatChanges;
-  suggestions?: string[];
+  coinsEarned: number;
+  statChanges: StatChanges;
+  suggestions: string[];
+  character?: CharacterProfile;
+  objective?: SceneObjective;
+  newDiscoveries?: string[];
+  ending?: EndingType | null;
 }
 
 export interface StatChanges {
-  health?: number;
-  hunger?: number;
-  thirst?: number;
-  energy?: number;
-  sanity?: number;
-}
-
-export interface CreativityCheckRequest {
-  userMessage: string;
-  conversationHistory: ConversationMessage[];
-}
-
-export interface CreativityCheckResponse {
-  isCreative: boolean;
-  coinsEarned: number;
-  reason: string;
+  attraction?: number;
+  desire?: number;
+  tension?: number;
+  stamina?: number;
+  chemistry?: number;
 }

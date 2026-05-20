@@ -6,10 +6,12 @@ interface GameShopProps {
   gameState: GameState
   onBuyItem: (item: ShopItem) => boolean
   onClose: () => void
+  isLocked?: boolean
 }
 
-export function GameShop({ gameState, onBuyItem, onClose }: GameShopProps) {
+export function GameShop({ gameState, onBuyItem, onClose, isLocked }: GameShopProps) {
   const handleBuy = (item: ShopItem) => {
+    if (isLocked) return
     const success = onBuyItem(item)
     if (!success) {
       alert('No tienes suficientes monedas!')
@@ -20,7 +22,7 @@ export function GameShop({ gameState, onBuyItem, onClose }: GameShopProps) {
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
       <div className="bg-background border rounded-lg p-6 max-w-4xl w-full mx-4 max-h-[80vh] overflow-y-auto">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-bold">🏪 Tienda</h2>
+          <h2 className="text-xl font-bold">🛍️ Tienda</h2>
           <Button variant="ghost" size="sm" onClick={onClose}>✕</Button>
         </div>
         
@@ -28,6 +30,12 @@ export function GameShop({ gameState, onBuyItem, onClose }: GameShopProps) {
           <span>🪙</span>
           <span className="font-medium">{gameState.coins} monedas</span>
         </div>
+
+        {isLocked && (
+          <div className="mb-4 p-2 bg-amber-100 dark:bg-amber-900/50 border border-amber-300 dark:border-amber-700 rounded text-sm text-amber-800 dark:text-amber-200 text-center">
+            ⏳ Esperando que termine la escena para poder comprar...
+          </div>
+        )}
 
         {gameState.inventory.length > 0 && (
           <div className="mb-4">
@@ -73,10 +81,10 @@ export function GameShop({ gameState, onBuyItem, onClose }: GameShopProps) {
                 <Button
                   size="sm"
                   onClick={() => handleBuy(item)}
-                  disabled={!canAfford || owned}
+                  disabled={!canAfford || owned || isLocked}
                   className="w-full"
                 >
-                  {owned ? 'Ya tienes este item' : canAfford ? 'Comprar' : 'Sin monedas'}
+                  {owned ? 'Ya tienes este item' : isLocked ? 'En pausa...' : canAfford ? 'Comprar' : 'Sin monedas'}
                 </Button>
               </div>
             )

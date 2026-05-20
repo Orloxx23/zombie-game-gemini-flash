@@ -49,10 +49,9 @@ export function GameInput({
           </div>
           <PromptInputButton
             onClick={onOpenShop}
-            disabled={isLoading}
             className="gap-2"
           >
-            <span>🏪</span>
+            <span>🛍️</span>
             <span className="text-sm">Tienda</span>
           </PromptInputButton>
         </PromptInputTools>
