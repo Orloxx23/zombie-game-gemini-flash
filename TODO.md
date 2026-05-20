@@ -1,0 +1,1 @@
+- [ ] Mejorar tienda, mas orden, secciones, header fixed

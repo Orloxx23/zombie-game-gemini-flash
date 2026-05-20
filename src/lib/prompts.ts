@@ -24,15 +24,15 @@ REGLAS CRÍTICAS DE PROGRESIÓN:
 
 REGLAS DE PERSPECTIVA (POV / primera persona) — CRÍTICAS:
 - La cámara ES el jugador. Nunca describas su rostro ni su cuerpo completo.
-- En el prompt IMAGEN: describí solo a la OTRA persona y, opcionalmente, manos/brazos/torso del jugador en primer plano.
-- PROHIBIDO escribir verbos genéricos como "kissing", "they kiss", "couple embracing", "two people". El modelo de imagen los renderiza como vista de pareja (third-person), no como POV.
-- En lugar de "kissing" describí lo que la CÁMARA realmente ve: "her face inches from the camera, eyes half-closed, lips parted just before the kiss" o "extreme close-up of her lips approaching the camera, her hand on the viewer's cheek".
-- En lugar de "they have sex" describí: "her body on top of the viewer seen from below, looking up at her face, her hands on the viewer's chest" o "her face close to the camera with eyes closed in pleasure, viewer's hand visible on her hip".
-- Frases útiles para POV: "looking up at her", "she leans down toward the camera", "her face fills the frame", "from below her", "her body above the viewer", "her gaze locked on the camera", "her hand reaching toward the camera", "viewer's hand on her [body part]".
+- En el prompt IMAGEN: describí solo a la OTRA persona. Ella ocupa el frame.
+- REGLA DE MANOS: NO menciones manos del jugador ni manos de ella tocando la cámara. La acción inicial (acto 1) no necesita manos. Que ella se vea sola, mirando a la cámara o haciendo lo que la escena requiera.
+- PROHIBIDO escribir "kissing", "couple", "two people". El modelo interpreta esas palabras como vista de pareja (third-person).
+- Frases útiles POV: "looking up at her", "her face close to the camera", "her body filling the frame", "she leans toward the camera". Nunca describas manos extendidas, palmas hacia cámara, ni dos personas.
 
 REGLAS DE CONSISTENCIA VISUAL:
-- En esta primera escena, definí la apariencia física del personaje con MUCHO detalle (edad, pelo, ojos, piel, cuerpo, vestimenta exacta). Este será el "canon" visual para toda la historia.
-- En cada IMAGEN subsecuente vas a repetir esa misma descripción física.
+- En esta primera escena, definí la apariencia física del personaje con MUCHO detalle (edad, pelo, ojos, piel, cuerpo, vestimenta exacta). Este será el "canon visual del personaje" para toda la historia.
+- Definí también el SETTING con detalle visual MUY específico: no "at a bar" sino algo como "dimly lit hotel bar with red velvet booths, dark wood counter, warm tungsten lighting, candle on the table, rain visible through the window". Este será el "canon visual del escenario".
+- En cada IMAGEN subsecuente vas a repetir EXACTAMENTE: (a) descripción física del personaje, (b) descripción del escenario actual. Eso mantiene continuidad.
 
 Genera la escena inicial en 2 párrafos cortos: ambiente vívido, presentación del personaje, primer intercambio, gancho narrativo claro. Terminá con una pregunta abierta al jugador.
 
@@ -144,29 +144,34 @@ ENDINGS POSIBLES (sólo activar cuando aplique, sino "ninguno"):
 
 REGLAS DE PERSPECTIVA (POV) — CRÍTICAS:
 - Toda escena se ve desde los ojos del jugador. Nunca describas su cara/cuerpo completo.
-- En IMAGEN, solo describí a la OTRA persona y, si aplica, partes del jugador (manos, brazos, torso, piernas) en primer plano.
+- En IMAGEN, describí solo a la OTRA persona. ELLA ocupa el frame.
 - PROHIBIDO escribir verbos de acción como "kissing", "they kiss", "couple", "two people facing camera", "she sucks", "he licks", "they have sex". El modelo de imagen renderiza eso como third-person.
-- En lugar de describir LA ACCIÓN, describí EXACTAMENTE LO QUE LA CÁMARA VE — siempre con ELLA como sujeto único y partes del cuerpo del jugador en foreground si aplica.
+- REGLA DE MANOS: NO menciones las manos del jugador ni las manos de ella tocando la cámara salvo que sea ABSOLUTAMENTE NECESARIO para la composición (ej. doggy donde se ven las manos del jugador en su cadera). En el 80% de las imágenes, NO menciones manos del jugador. Que ella se vea sola en el frame.
+- En lugar de describir LA ACCIÓN, describí EXACTAMENTE LO QUE LA CÁMARA VE — siempre con ELLA como sujeto único.
 
-DICCIONARIO DE TRADUCCIÓN ACCIÓN → POV (usá EXACTAMENTE este patrón):
-- Beso → "her face inches from the camera, eyes half-closed, lips parted, her hand on the viewer's jaw"
-- Beso en cuello → "extreme close-up of her bare neck and collarbone, chin tilted back, her hair falling to the side"
-- Acariciar/tocar su cuerpo → "her body close to the camera, viewer's hand visible on her [hip / thigh / waist / cheek]"
-- Desnudarla / quitarle ropa → "her [garment] half-removed, her bare [shoulders / chest / hip] exposed, looking at the camera"
-- Chupar/besar pechos → "her bare breasts very close to the camera, nipples visible, soft skin filling the frame, her hand on the back of the viewer's head"
-- Manos en sus pechos → "her bare breasts close to the camera, viewer's hands cupping them from below"
-- Sexo oral (ella al jugador) → "looking down at her: her face between the viewer's thighs, hair falling around her cheeks, looking up at the camera, mouth slightly open"
-- Sexo oral (jugador a ella) → "extreme close-up looking up along her body: her flat stomach, her breasts above, her face thrown back in pleasure at the top of frame"
-- Sexo posición misionero (jugador encima) → "looking down at her face: eyes locked on the camera, mouth open, her breasts visible below her face, her hands gripping the sheets"
-- Ella encima del jugador → "looking up at her: her body riding the camera, her breasts above the lens, her face thrown back, hair flowing"
+DICCIONARIO DE TRADUCCIÓN ACCIÓN → POV (usá EXACTAMENTE estos patrones; observá que la mayoría NO mencionan manos):
+- Beso → "her face very close to the camera, eyes closed, lips parted just before the kiss"
+- Beso en cuello → "extreme close-up of her bare neck and collarbone, chin tilted back, her hair falling to one side"
+- Mirada seductora → "her face close to the camera, looking directly at the lens with a half-smile, hair slightly messy"
+- Acariciar/tocar su cuerpo → "her bare body close to the camera, soft skin, hip and waist filling the frame"
+- Desnudarla / quitarle ropa → "her [garment] half-removed, her bare [shoulders / chest / hip] exposed, looking at the camera with parted lips"
+- Chupar/besar pechos → "her bare breasts very close to the camera, nipples visible, her chest filling the frame, her face above showing pleasure"
+- Manos en sus pechos → "her bare breasts close to the camera, full and soft, her face above with closed eyes"
+- Sexo oral (ella al jugador) → "view looking down: her face between the viewer's thighs, hair falling around her cheeks, eyes looking up at the camera, mouth slightly open"
+- Sexo oral (jugador a ella) → "view looking up along her body: her flat stomach in the foreground, her breasts above, her face thrown back at the top of frame"
+- Sexo posición misionero → "view looking down at her face: eyes locked on the camera, mouth open in pleasure, her breasts bouncing below"
+- Ella encima del jugador → "low angle looking up at her: her body riding above the camera, her breasts and face visible, hair flowing back"
 - Sexo desde atrás (doggy) → "view from behind her: her back arched, her ass close to the camera, her face turned to look back at the lens, hair messed"
-- Cuerpo desnudo descansando → "her naked body lying next to the camera, looking at the viewer, one arm under her head, soft lighting"
-- Verla desde abajo → "low angle looking up: her standing above the camera, her body silhouetted, looking down at the viewer with a smirk"
+- Cuerpo desnudo descansando → "her naked body lying on her side close to the camera, looking at the viewer, soft lighting on her skin"
+- Verla desde abajo → "low angle looking up: her standing above the camera, looking down at the viewer with a smirk"
 
-REGLA UNIVERSAL: si dudás, preguntate "¿qué ve un GoPro pegado a la frente del jugador en este momento?" y describí ESO.
+REGLA UNIVERSAL: si dudás, preguntate "¿qué ve un GoPro pegado a la frente del jugador en este momento?" y describí ESO. Y recordá: las manos NUNCA son protagonistas, son detalles opcionales que solo aparecen si la pose lo exige.
 
 REGLAS DE CONSISTENCIA VISUAL:
 - En cada IMAGEN repetí EXACTAMENTE la descripción física canónica del personaje (misma edad, pelo, ojos, piel, cuerpo). La vestimenta cambia solo si la narrativa lo justifica.
+- También repetí EXACTAMENTE la descripción del escenario establecido en la escena anterior (mismo lugar, mismos muebles, misma iluminación, mismos detalles ambientales). Mirá la última IMAGEN del historial y copiá los detalles del setting.
+- SOLO cambiá de escenario cuando la narrativa lo requiere explícitamente: ej. ella te invita a su cuarto, se mueven al balcón, toman un taxi, salen del bar. Cuando cambies de escenario, DEFINÍ EL NUEVO con detalle visual específico y a partir de ahí mantenelo consistente.
+- Si en la narrativa solo cambia la pose, ropa o acción dentro del MISMO lugar → mantené el setting idéntico. Cualquier cambio de fondo sin razón narrativa rompe la inmersión.
 
 NUNCA incluyas: menores, no consentimiento, violencia sexual, incesto, bestialidad.
 
@@ -187,5 +192,5 @@ Todas las líneas son OBLIGATORIAS y deben aparecer en ese orden exacto.`;
   },
 
   GENERATE_IMAGE: (description: string) =>
-    `Strict POV shot, first person perspective, viewer's eyes camera, GoPro-on-forehead angle: ${description}. The camera IS the viewer's eyes. ABSOLUTELY ONLY ONE PERSON visible in frame: the other character. The viewer is invisible — no viewer's face, no viewer's reflection, no viewer's head, no second person facing the camera. Only the viewer's hands, forearms, or torso may appear in the foreground if natural. The other character looks directly at the camera or at the viewer's hands. Cinematic photo, photorealistic, soft natural lighting, shallow depth of field, intimate atmosphere, detailed.`,
+    `Strict POV shot, first person perspective, viewer's eyes camera, GoPro-on-forehead angle: ${description}. The camera IS the viewer's eyes. ABSOLUTELY ONLY ONE PERSON visible in frame: the other character. The viewer is invisible — no viewer's face, no viewer's reflection, no viewer's head, no second person facing the camera. Do NOT put hands in the foreground unless the description explicitly asks for it. Do NOT make the other character reach her hands toward the camera. Natural framing: she occupies most of the frame, looking at the viewer or doing what the scene requires. Cinematic photo, photorealistic, soft natural lighting, shallow depth of field, intimate atmosphere, detailed.`,
 };

@@ -49,7 +49,7 @@
   },
   "12": {
     "inputs": {
-      "prompt": "two faces, two heads, two people facing the camera, male face visible, man's face, viewer's face, player's face, self portrait, selfie of couple, third person view, couple shot, side view of couple kissing, profile view of two people, third person perspective, full body of viewer, viewer's full body, two heads kissing, two profiles, mirror, reflection of viewer, deformed face, bad anatomy, extra limbs, fused faces, blurry, low quality, watermark, text",
+      "prompt": "two faces, two heads, two people facing the camera, male face visible, man's face, viewer's face, player's face, self portrait, selfie of couple, third person view, couple shot, side view of couple kissing, profile view of two people, third person perspective, full body of viewer, viewer's full body, two heads kissing, two profiles, mirror, reflection of viewer, outstretched hands toward camera, hands reaching toward camera, hand in front of face, palm toward camera, palms facing camera, her hands on viewer's face, her hands cupping the camera, both her hands reaching out, multiple hands in foreground, awkward hand pose, hands gesturing at camera, floating hands, deformed face, bad anatomy, extra limbs, fused faces, blurry, low quality, watermark, text",
       "clip": ["2", 1],
       "vae": ["2", 2]
     },
