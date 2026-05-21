@@ -1,7 +1,33 @@
-import type { ShopItem } from "./types";
+import type { ShopCategory, ShopItem } from "./types";
+
+export const SHOP_CATEGORIES: Record<
+  ShopCategory,
+  { label: string; icon: string; description: string }
+> = {
+  charm: {
+    label: "Encanto",
+    icon: "💖",
+    description: "Sube atracción y química",
+  },
+  desire: {
+    label: "Deseo",
+    icon: "🔥",
+    description: "Sube deseo y tensión",
+  },
+  recovery: {
+    label: "Recuperación",
+    icon: "💪",
+    description: "Restaura resistencia o rescata una mala jugada",
+  },
+  gear: {
+    label: "Equipamiento",
+    icon: "🎒",
+    description: "Items permanentes para tu inventario",
+  },
+};
 
 export const SHOP_ITEMS: ShopItem[] = [
-  // ─── BÁSICOS / EARLY GAME ───────────────────────────────────────
+  // ─── ENCANTO (atracción + química) ─────────────────────────────
   {
     id: "perfume",
     name: "Perfume",
@@ -11,16 +37,8 @@ export const SHOP_ITEMS: ShopItem[] = [
     effect: "+35 atracción",
     statEffects: { attraction: 35 },
     consumable: true,
-  },
-  {
-    id: "wine",
-    name: "Vino tinto",
-    icon: "🍷",
-    price: 18,
-    description: "Una botella para soltar inhibiciones",
-    effect: "+30 deseo, +10 tensión",
-    statEffects: { desire: 30, tension: 10 },
-    consumable: true,
+    category: "charm",
+    cooldownTurns: 3,
   },
   {
     id: "chocolates",
@@ -31,38 +49,8 @@ export const SHOP_ITEMS: ShopItem[] = [
     effect: "+35 química",
     statEffects: { chemistry: 35 },
     consumable: true,
-  },
-  {
-    id: "energy_shot",
-    name: "Bebida energética",
-    icon: "⚡",
-    price: 20,
-    description: "Para mantener el ritmo toda la noche",
-    effect: "+45 resistencia",
-    statEffects: { stamina: 45 },
-    consumable: true,
-  },
-  {
-    id: "candles",
-    name: "Velas aromáticas",
-    icon: "🕯️",
-    price: 18,
-    description: "Crea el ambiente perfecto",
-    effect: "+25 tensión, +15 química",
-    statEffects: { tension: 25, chemistry: 15 },
-    consumable: true,
-  },
-
-  // ─── PERSONALIDAD-ESPECÍFICOS ──────────────────────────────────
-  {
-    id: "premium_cocktail",
-    name: "Cóctel premium",
-    icon: "🍸",
-    price: 28,
-    description: "Para la fiestera. Para la sofisticada.",
-    effect: "+20 deseo, +20 atracción",
-    statEffects: { desire: 20, attraction: 20 },
-    consumable: true,
+    category: "charm",
+    cooldownTurns: 2,
   },
   {
     id: "bouquet",
@@ -73,6 +61,8 @@ export const SHOP_ITEMS: ShopItem[] = [
     effect: "+35 química, +10 atracción",
     statEffects: { chemistry: 35, attraction: 10 },
     consumable: true,
+    category: "charm",
+    cooldownTurns: 4,
   },
   {
     id: "gourmet_coffee",
@@ -83,16 +73,8 @@ export const SHOP_ITEMS: ShopItem[] = [
     effect: "+30 química, +20 resistencia",
     statEffects: { chemistry: 30, stamina: 20 },
     consumable: true,
-  },
-  {
-    id: "cigarette",
-    name: "Cigarrillo compartido",
-    icon: "🚬",
-    price: 8,
-    description: "Cliché con onda. Funciona con la rebelde.",
-    effect: "+25 tensión, +10 deseo",
-    statEffects: { tension: 25, desire: 10 },
-    consumable: true,
+    category: "charm",
+    cooldownTurns: 3,
   },
   {
     id: "book",
@@ -103,6 +85,8 @@ export const SHOP_ITEMS: ShopItem[] = [
     effect: "+25 atracción, +25 química",
     statEffects: { attraction: 25, chemistry: 25 },
     consumable: true,
+    category: "charm",
+    cooldownTurns: 5,
   },
   {
     id: "playlist_card",
@@ -113,9 +97,109 @@ export const SHOP_ITEMS: ShopItem[] = [
     effect: "+20 atracción, +20 química",
     statEffects: { attraction: 20, chemistry: 20 },
     consumable: true,
+    category: "charm",
+    cooldownTurns: 4,
+  },
+  {
+    id: "premium_cocktail",
+    name: "Cóctel premium",
+    icon: "🍸",
+    price: 28,
+    description: "Para la fiestera. Para la sofisticada.",
+    effect: "+20 deseo, +20 atracción",
+    statEffects: { desire: 20, attraction: 20 },
+    consumable: true,
+    category: "charm",
+    cooldownTurns: 3,
   },
 
-  // ─── RESCATE / RECUPERACIÓN ────────────────────────────────────
+  // ─── DESEO (deseo + tensión) ──────────────────────────────────
+  {
+    id: "wine",
+    name: "Vino tinto",
+    icon: "🍷",
+    price: 18,
+    description: "Una botella para soltar inhibiciones",
+    effect: "+30 deseo, +10 tensión",
+    statEffects: { desire: 30, tension: 10 },
+    consumable: true,
+    category: "desire",
+    cooldownTurns: 2,
+  },
+  {
+    id: "candles",
+    name: "Velas aromáticas",
+    icon: "🕯️",
+    price: 18,
+    description: "Crea el ambiente perfecto",
+    effect: "+25 tensión, +15 química",
+    statEffects: { tension: 25, chemistry: 15 },
+    consumable: true,
+    category: "desire",
+    cooldownTurns: 3,
+  },
+  {
+    id: "cigarette",
+    name: "Cigarrillo compartido",
+    icon: "🚬",
+    price: 8,
+    description: "Cliché con onda. Funciona con la rebelde.",
+    effect: "+25 tensión, +10 deseo",
+    statEffects: { tension: 25, desire: 10 },
+    consumable: true,
+    category: "desire",
+    cooldownTurns: 2,
+  },
+  {
+    id: "aphrodisiac_fruits",
+    name: "Frutas afrodisíacas",
+    icon: "🍓",
+    price: 35,
+    description: "Fresas, miel, champaña. Casi sin sutileza.",
+    effect: "+35 deseo, +20 tensión",
+    statEffects: { desire: 35, tension: 20 },
+    consumable: true,
+    category: "desire",
+    cooldownTurns: 4,
+  },
+  {
+    id: "hard_drink",
+    name: "Trago fuerte",
+    icon: "🥃",
+    price: 22,
+    description: "Whisky doble. Riesgo: agota.",
+    effect: "+35 deseo, -15 resistencia",
+    statEffects: { desire: 35, stamina: -15 },
+    consumable: true,
+    category: "desire",
+    cooldownTurns: 3,
+  },
+  {
+    id: "massage_oil",
+    name: "Aceite de masaje",
+    icon: "💆",
+    price: 30,
+    description: "Para descubrir su cuerpo despacio.",
+    effect: "+30 tensión, +25 deseo",
+    statEffects: { tension: 30, desire: 25 },
+    consumable: true,
+    category: "desire",
+    cooldownTurns: 4,
+  },
+
+  // ─── RECUPERACIÓN (stamina + rescue) ──────────────────────────
+  {
+    id: "energy_shot",
+    name: "Bebida energética",
+    icon: "⚡",
+    price: 20,
+    description: "Para mantener el ritmo toda la noche",
+    effect: "+45 resistencia",
+    statEffects: { stamina: 45 },
+    consumable: true,
+    category: "recovery",
+    cooldownTurns: 2,
+  },
   {
     id: "sincere_apology",
     name: "Disculpas con detalle",
@@ -125,6 +209,8 @@ export const SHOP_ITEMS: ShopItem[] = [
     effect: "+40 atracción",
     statEffects: { attraction: 40 },
     consumable: true,
+    category: "recovery",
+    cooldownTurns: 6,
   },
   {
     id: "second_chance",
@@ -141,52 +227,23 @@ export const SHOP_ITEMS: ShopItem[] = [
       chemistry: 25,
     },
     consumable: true,
+    category: "recovery",
+    cooldownTurns: 8,
   },
   {
     id: "vulnerability",
     name: "Confesión sincera",
     icon: "💧",
     price: 40,
-    description:
-      "Le contás algo personal tuyo. Te abrís. Subí química como nada.",
-    effect: "+50 química, -10 atracción si la repetís",
+    description: "Le contás algo personal tuyo. Te abrís. Sube química como nada.",
+    effect: "+50 química",
     statEffects: { chemistry: 50 },
     consumable: true,
+    category: "recovery",
+    cooldownTurns: 6,
   },
 
-  // ─── AFRODISÍACOS / HEAVY HITTERS ──────────────────────────────
-  {
-    id: "aphrodisiac_fruits",
-    name: "Frutas afrodisíacas",
-    icon: "🍓",
-    price: 35,
-    description: "Fresas, miel, champaña. Casi sin sutileza.",
-    effect: "+35 deseo, +20 tensión",
-    statEffects: { desire: 35, tension: 20 },
-    consumable: true,
-  },
-  {
-    id: "hard_drink",
-    name: "Trago fuerte",
-    icon: "🥃",
-    price: 22,
-    description: "Whisky doble. Riesgo: agota.",
-    effect: "+35 deseo, -15 resistencia",
-    statEffects: { desire: 35, stamina: -15 },
-    consumable: true,
-  },
-  {
-    id: "massage_oil",
-    name: "Aceite de masaje",
-    icon: "💆",
-    price: 30,
-    description: "Para descubrir su cuerpo despacio.",
-    effect: "+30 tensión, +25 deseo",
-    statEffects: { tension: 30, desire: 25 },
-    consumable: true,
-  },
-
-  // ─── PERMANENTES (en inventario, Grok los usa narrativamente) ──
+  // ─── EQUIPAMIENTO (permanentes) ───────────────────────────────
   {
     id: "lingerie",
     name: "Lencería",
@@ -196,6 +253,8 @@ export const SHOP_ITEMS: ShopItem[] = [
     effect: "Permanente — bonus narrativo en escenas íntimas",
     statEffects: {},
     consumable: false,
+    category: "gear",
+    cooldownTurns: 0,
   },
   {
     id: "intimate_toy",
@@ -206,6 +265,8 @@ export const SHOP_ITEMS: ShopItem[] = [
     effect: "Permanente — desbloquea acciones explícitas",
     statEffects: {},
     consumable: false,
+    category: "gear",
+    cooldownTurns: 0,
   },
   {
     id: "condoms",
@@ -216,6 +277,8 @@ export const SHOP_ITEMS: ShopItem[] = [
     effect: "Permanente — requerido por algunas chicas para acto 3",
     statEffects: {},
     consumable: false,
+    category: "gear",
+    cooldownTurns: 0,
   },
   {
     id: "hotel_room",
@@ -226,6 +289,8 @@ export const SHOP_ITEMS: ShopItem[] = [
     effect: "Permanente — habilita cambio a espacio privado",
     statEffects: {},
     consumable: false,
+    category: "gear",
+    cooldownTurns: 0,
   },
   {
     id: "expensive_watch",
@@ -236,6 +301,8 @@ export const SHOP_ITEMS: ShopItem[] = [
     effect: "Permanente — bonus narrativo de atracción",
     statEffects: {},
     consumable: false,
+    category: "gear",
+    cooldownTurns: 0,
   },
   {
     id: "private_driver",
@@ -246,6 +313,8 @@ export const SHOP_ITEMS: ShopItem[] = [
     effect: "Permanente — facilita transiciones de escenario",
     statEffects: {},
     consumable: false,
+    category: "gear",
+    cooldownTurns: 0,
   },
 ];
 

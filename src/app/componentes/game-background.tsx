@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { type GameMessage as GameMessageType } from "@/lib/types";
-import { Image } from "@/components/image";
 
 export default function GameBackground({
   image,
@@ -14,7 +13,7 @@ export default function GameBackground({
   const [showNew, setShowNew] = useState(true);
 
   useEffect(() => {
-    if (image?.base64Data && image?.base64Data !== currentImage?.base64Data) {
+    if (image?.url && image?.url !== currentImage?.url) {
       setPreviousImage(currentImage);
       setShowNew(false);
       const timer = setTimeout(() => {
@@ -23,28 +22,26 @@ export default function GameBackground({
       }, 1000);
       return () => clearTimeout(timer);
     }
-  }, [image?.base64Data, currentImage?.base64Data]);
+  }, [image?.url, currentImage?.url]);
 
   return (
     <div className="h-screen w-full absolute top-0 left-0 z-0">
       <div className="absolute z-10 bg-black/70 size-full backdrop-blur-2xl"></div>
 
-      {previousImage?.base64Data && (
-        <Image
-          base64={previousImage.base64Data}
-          mediaType={previousImage.mediaType || ""}
-          uint8Array={new Uint8Array()}
+      {previousImage?.url && (
+        <img
+          src={previousImage.url}
+          alt=""
           className={`size-full object-cover absolute transition-opacity duration-500 ${
             showNew ? "opacity-0" : "opacity-100"
           }`}
         />
       )}
 
-      {currentImage?.base64Data ? (
-        <Image
-          base64={currentImage.base64Data}
-          mediaType={currentImage.mediaType || ""}
-          uint8Array={new Uint8Array()}
+      {currentImage?.url ? (
+        <img
+          src={currentImage.url}
+          alt=""
           className={`size-full object-cover transition-opacity duration-500 ${
             showNew ? "opacity-100" : "opacity-0"
           }`}

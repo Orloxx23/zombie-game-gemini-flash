@@ -1,13 +1,18 @@
 import type { GameState } from "@/lib/types";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface GameObjectiveProps {
   gameState: GameState;
+  isLoading?: boolean;
 }
 
-export function GameObjective({ gameState }: GameObjectiveProps) {
+export function GameObjective({ gameState, isLoading }: GameObjectiveProps) {
   const { objective, discoveries, character } = gameState;
 
-  if (!objective && !character) return null;
+  if (!objective && !character) {
+    if (!isLoading) return null;
+    return <GameObjectiveSkeleton />;
+  }
 
   return (
     <div className="bg-background/50 backdrop-blur-sm border rounded-xl p-3 space-y-2">
@@ -59,6 +64,31 @@ export function GameObjective({ gameState }: GameObjectiveProps) {
           ))}
         </div>
       )}
+    </div>
+  );
+}
+
+function GameObjectiveSkeleton() {
+  return (
+    <div className="bg-background/50 backdrop-blur-sm border rounded-xl p-3 space-y-2">
+      <div className="flex items-start gap-2">
+        <span className="text-sm opacity-50">🎯</span>
+        <div className="flex-1 space-y-1.5">
+          <div className="flex items-center gap-2">
+            <Skeleton className="h-3 w-12" />
+            <div className="flex gap-1">
+              <Skeleton className="h-1 w-6 rounded-full" />
+              <Skeleton className="h-1 w-6 rounded-full" />
+              <Skeleton className="h-1 w-6 rounded-full" />
+            </div>
+          </div>
+          <Skeleton className="h-4 w-3/4" />
+        </div>
+      </div>
+      <div className="flex items-center gap-2 pt-1">
+        <span className="text-xs opacity-50">💋</span>
+        <Skeleton className="h-3 w-2/3" />
+      </div>
     </div>
   );
 }

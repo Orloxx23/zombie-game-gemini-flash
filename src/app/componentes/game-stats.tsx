@@ -28,27 +28,27 @@ function StatBar({
   const isDanger = current <= dangerThreshold;
 
   return (
-    <div className={cn("flex items-center gap-2 min-w-0", className)}>
-      <span className="text-sm">{icon}</span>
-      <div className="flex-1 min-w-0">
-        <div className="flex justify-between items-center mb-1">
-          <span className="text-xs font-medium truncate">{label}</span>
-          <span
-            className={`text-xs ${
-              isDanger ? "text-red-500 font-bold" : "text-gray-600"
-            }`}
-          >
-            {current}/{max}
-          </span>
+    <div className={cn("min-w-0", className)}>
+      <div className="flex items-center justify-between gap-2 mb-1">
+        <div className="flex items-center gap-1.5 min-w-0">
+          <span className="text-sm leading-none">{icon}</span>
+          <span className="text-xs font-medium">{label}</span>
         </div>
-        <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-          <div
-            className={`h-2 rounded-full transition-all duration-300 ${
-              isDanger ? "bg-red-500" : color
-            }`}
-            style={{ width: `${percentage}%` }}
-          />
-        </div>
+        <span
+          className={`text-[10px] tabular-nums ${
+            isDanger ? "text-red-500 font-bold" : "text-muted-foreground"
+          }`}
+        >
+          {current}/{max}
+        </span>
+      </div>
+      <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5">
+        <div
+          className={`h-1.5 rounded-full transition-all duration-300 ${
+            isDanger ? "bg-red-500" : color
+          }`}
+          style={{ width: `${percentage}%` }}
+        />
       </div>
     </div>
   );
@@ -56,8 +56,8 @@ function StatBar({
 
 export function GameStats({ gameState }: GameStatsProps) {
   return (
-    <div className="bg-background/50 backdrop-blur-sm border rounded-xl p-3 space-y-3">
-      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+    <div className="bg-background/50 backdrop-blur-sm border rounded-xl p-3 lg:bg-transparent lg:backdrop-blur-none lg:border-0 lg:rounded-none lg:p-0">
+      <div className="grid grid-cols-2 gap-x-4 gap-y-3 lg:grid-cols-1 lg:gap-y-2.5">
         <StatBar
           label="Atracción"
           icon="💖"
@@ -65,7 +65,6 @@ export function GameStats({ gameState }: GameStatsProps) {
           max={gameState.maxAttraction}
           color="bg-pink-500"
           dangerThreshold={25}
-          className="w-full span-col-2 lg:col-span-1"
         />
         <StatBar
           label="Deseo"
@@ -74,7 +73,6 @@ export function GameStats({ gameState }: GameStatsProps) {
           max={gameState.maxDesire}
           color="bg-red-500"
           dangerThreshold={0}
-          className="w-full col-span-1"
         />
         <StatBar
           label="Tensión"
@@ -83,7 +81,6 @@ export function GameStats({ gameState }: GameStatsProps) {
           max={gameState.maxTension}
           color="bg-yellow-500"
           dangerThreshold={0}
-          className="w-full col-span-1"
         />
         <StatBar
           label="Resistencia"
@@ -92,7 +89,6 @@ export function GameStats({ gameState }: GameStatsProps) {
           max={gameState.maxStamina}
           color="bg-green-500"
           dangerThreshold={20}
-          className="w-full col-span-1"
         />
         <StatBar
           label="Química"
@@ -101,7 +97,6 @@ export function GameStats({ gameState }: GameStatsProps) {
           max={gameState.maxChemistry}
           color="bg-purple-500"
           dangerThreshold={30}
-          className="w-full col-span-1"
         />
       </div>
     </div>

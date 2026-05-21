@@ -15,6 +15,22 @@ export function extractNarrative(accumulated: string): string {
   return accumulated.slice(0, idx).trim();
 }
 
+/**
+ * Returns the IMAGEN prompt as soon as the next marker (\nSUGERENCIAS:)
+ * appears in the stream — meaning the prompt is fully written.
+ * Returns null if the IMAGEN block hasn't closed yet.
+ */
+export function extractCompletedImagePrompt(accumulated: string): string | null {
+  const imgIdx = accumulated.indexOf(GAME_CONFIG.IMAGE.SEPARATOR);
+  if (imgIdx === -1) return null;
+
+  const afterImg = accumulated.slice(imgIdx + GAME_CONFIG.IMAGE.SEPARATOR.length);
+  const nextMarkerIdx = afterImg.indexOf(`\n${GAME_CONFIG.SUGGESTIONS.SEPARATOR.trim()}`);
+  if (nextMarkerIdx === -1) return null;
+
+  return afterImg.slice(0, nextMarkerIdx).trim();
+}
+
 function getLineValue(text: string, separator: string): string | undefined {
   const idx = text.indexOf(separator);
   if (idx === -1) return undefined;

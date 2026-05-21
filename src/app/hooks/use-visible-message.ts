@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { type GameMessage } from '@/lib/types';
 
 export function useVisibleMessage(messages: GameMessage[]) {
@@ -29,12 +29,12 @@ export function useVisibleMessage(messages: GameMessage[]) {
     };
   }, []);
 
-  const observeMessage = (element: HTMLElement | null, messageId: string) => {
+  const observeMessage = useCallback((element: HTMLElement | null, messageId: string) => {
     if (!element || !observerRef.current) return;
-    
+
     element.setAttribute('data-message-id', messageId);
     observerRef.current.observe(element);
-  };
+  }, []);
 
   const visibleMessage = messages.find(msg => msg.id === visibleMessageId);
   

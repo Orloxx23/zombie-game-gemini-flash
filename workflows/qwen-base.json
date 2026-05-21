@@ -9,8 +9,8 @@
   "6": {
     "inputs": {
       "seed": 1080991361742337,
-      "steps": 10,
-      "cfg": 1,
+      "steps": 8,
+      "cfg": 2.5,
       "sampler_name": "euler_ancestral",
       "scheduler": "beta",
       "denoise": 1,
@@ -49,7 +49,7 @@
   },
   "12": {
     "inputs": {
-      "prompt": "two faces, two heads, two people facing the camera, male face visible, man's face, viewer's face, player's face, self portrait, selfie of couple, third person view, couple shot, side view of couple kissing, profile view of two people, third person perspective, full body of viewer, viewer's full body, two heads kissing, two profiles, mirror, reflection of viewer, outstretched hands toward camera, hands reaching toward camera, hand in front of face, palm toward camera, palms facing camera, her hands on viewer's face, her hands cupping the camera, both her hands reaching out, multiple hands in foreground, awkward hand pose, hands gesturing at camera, floating hands, deformed face, bad anatomy, extra limbs, fused faces, blurry, low quality, watermark, text",
+      "prompt": "selfie, selfie pose, selfie angle, taking a selfie, posing for selfie, holding selfie stick, vlog pose, fisheye selfie, two faces, two heads, male face visible, man's face, viewer's face, player's face, self portrait, holding camera, holding phone, holding lens, hand on camera, hands touching camera, hands grabbing camera, hands cupping camera, hands on lens, fingers on lens, couple shot, third person view, third person perspective, full body of viewer, two heads kissing, two profiles, mirror, reflection of viewer, outstretched arms, both arms outstretched, arms reaching forward, arms extended forward, arms toward viewer, arms toward camera, hands reaching forward, hand in front of face, palm forward, palms forward, both her hands reaching out, peace sign, victory sign, gesturing hands, multiple hands, floating hands, awkward hand pose, weird hand pose, exaggerated arm length, long arms, stretched arms, deformed face, bad anatomy, extra limbs, fused faces, malformed hands, blurry, low quality, watermark, text",
       "clip": ["2", 1],
       "vae": ["2", 2]
     },

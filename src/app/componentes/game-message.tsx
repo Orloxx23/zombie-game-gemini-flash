@@ -1,10 +1,10 @@
 import { Message, MessageContent } from "@/components/message";
 import { Response } from "@/components/response";
 import { type GameMessage as GameMessageType } from "@/lib/types";
-import { Image } from "@/components/image";
 import { UI_MESSAGES } from "@/lib/consts";
 import { Loader } from "@/components/loader";
-import { useRef, useEffect } from "react";
+import { memo, useRef, useEffect, useState } from "react";
+import { ImageModal } from "./image-modal";
 
 const STAT_META = {
   attraction: { icon: "💖", label: "Atracción" },
@@ -14,7 +14,7 @@ const STAT_META = {
   chemistry: { icon: "✨", label: "Química" },
 } as const;
 
-export function GameMessage({
+function GameMessageInner({
   message,
   onObserve,
 }: {
@@ -24,6 +24,7 @@ export function GameMessage({
   const { role, content, image, imageLoading, coinsEarned, newDiscoveries, actAdvanced, statChanges } = message;
 
   const messageRef = useRef<HTMLDivElement>(null);
+  const [zoomOpen, setZoomOpen] = useState(false);
 
   useEffect(() => {
     if (onObserve && messageRef.current) {
@@ -56,15 +57,30 @@ export function GameMessage({
               )}
 
               {image && (
-                <Image
-                  base64={image.base64Data}
-                  mediaType={image.mediaType}
-                  uint8Array={new Uint8Array()}
-                  alt="scene illustration"
-                  className="w-full h-full object-cover object-center"
-                />
+                <button
+                  type="button"
+                  onClick={() => setZoomOpen(true)}
+                  aria-label="Ampliar imagen"
+                  className="w-full h-full cursor-zoom-in p-0 m-0 border-0 bg-transparent"
+                >
+                  <img
+                    src={image.url}
+                    alt="scene illustration"
+                    loading="lazy"
+                    decoding="async"
+                    className="w-full h-full object-cover object-center"
+                  />
+                </button>
               )}
             </picture>
+          )}
+
+          {image && (
+            <ImageModal
+              open={zoomOpen}
+              onClose={() => setZoomOpen(false)}
+              url={image.url}
+            />
           )}
 
           <Response>{content}</Response>
@@ -126,3 +142,17 @@ export function GameMessage({
     </div>
   );
 }
+
+export const GameMessage = memo(GameMessageInner, (prev, next) => {
+  const a = prev.message;
+  const b = next.message;
+  return (
+    a.id === b.id &&
+    a.content === b.content &&
+    a.imageLoading === b.imageLoading &&
+    a.image?.url === b.image?.url &&
+    a.coinsEarned === b.coinsEarned &&
+    a.actAdvanced === b.actAdvanced &&
+    prev.onObserve === next.onObserve
+  );
+});

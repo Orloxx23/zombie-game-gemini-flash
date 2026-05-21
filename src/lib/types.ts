@@ -10,6 +10,8 @@ export interface GameMessage {
   statChanges?: StatChanges;
 }
 
+export type ShopCategory = "charm" | "desire" | "recovery" | "gear";
+
 export interface ShopItem {
   id: string;
   name: string;
@@ -19,6 +21,9 @@ export interface ShopItem {
   effect: string;
   statEffects: StatChanges;
   consumable: boolean;
+  category: ShopCategory;
+  /** Turns the item stays unavailable after being used. 0 = no cooldown. */
+  cooldownTurns: number;
 }
 
 export interface CharacterProfile {
@@ -64,12 +69,12 @@ export interface GameState {
   objective: SceneObjective | null;
   discoveries: string[];
   ending: EndingType | null;
+  itemCooldowns: Record<string, number>;
 }
 
 export interface GeneratedImage {
-  base64Data: string;
+  url: string;
   mediaType: string;
-  uint8ArrayData?: Uint8Array;
 }
 
 export interface ConversationMessage {
@@ -82,6 +87,7 @@ export interface GenerateStoryRequest {
   conversationHistory: ConversationMessage[];
   isStart: boolean;
   playerStats?: GameState;
+  locale?: string;
 }
 
 export interface GenerateImageRequest {

@@ -7,7 +7,11 @@ import type {
   GenerateStoryResponse,
 } from "@/lib/types";
 import { getItemById } from "@/lib/shop-items";
-import { extractNarrative, parseFullResponse } from "@/lib/parse-story";
+import {
+  extractCompletedImagePrompt,
+  extractNarrative,
+  parseFullResponse,
+} from "@/lib/parse-story";
 
 const INITIAL_STATE: GameState = {
   coins: 10,
@@ -28,6 +32,7 @@ const INITIAL_STATE: GameState = {
   objective: null,
   discoveries: [],
   ending: null,
+  itemCooldowns: {},
 };
 
 export function useZombieGame() {
@@ -38,12 +43,18 @@ export function useZombieGame() {
 
   const streamStory = async (
     body: object,
-    messageId: string
+    messageId: string,
+    onEarlyImagePrompt?: (prompt: string) => void
   ): Promise<GenerateStoryResponse> => {
+    const locale =
+      typeof navigator !== "undefined" && navigator.language
+        ? navigator.language
+        : "en-US";
+
     const response = await fetch("/api/generate-story", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
+      body: JSON.stringify({ ...body, locale }),
     });
 
     if (!response.ok || !response.body) {
@@ -53,6 +64,7 @@ export function useZombieGame() {
     const reader = response.body.getReader();
     const decoder = new TextDecoder();
     let accumulated = "";
+    let imagePromptFired = false;
 
     while (true) {
       const { done, value } = await reader.read();
@@ -64,6 +76,14 @@ export function useZombieGame() {
           m.id === messageId ? { ...m, content: narrative } : m
         )
       );
+
+      if (!imagePromptFired && onEarlyImagePrompt) {
+        const earlyPrompt = extractCompletedImagePrompt(accumulated);
+        if (earlyPrompt) {
+          imagePromptFired = true;
+          onEarlyImagePrompt(earlyPrompt);
+        }
+      }
     }
 
     return parseFullResponse(accumulated);
@@ -83,7 +103,11 @@ export function useZombieGame() {
     ]);
 
     try {
-      const data = await streamStory({ isStart: true }, messageId);
+      const data = await streamStory(
+        { isStart: true },
+        messageId,
+        (earlyPrompt) => generateImage(messageId, earlyPrompt)
+      );
 
       setGameState((prev) => ({
         ...prev,
@@ -91,8 +115,6 @@ export function useZombieGame() {
         character: data.character ?? prev.character,
         objective: data.objective ?? prev.objective,
       }));
-
-      generateImage(messageId, data.imagePrompt);
     } catch (error) {
       console.error("Error generating story:", error);
     } finally {
@@ -113,11 +135,25 @@ export function useZombieGame() {
       }
 
       const imageData = await response.json();
+      const base64 = imageData.image?.base64Data;
+      const mediaType = imageData.image?.mediaType ?? "image/png";
+
+      if (!base64) throw new Error("No image data in response");
+
+      // Convert base64 → Blob → Object URL (frees memory: image is no longer
+      // a giant string in React state, just a short reference).
+      const byteString = atob(base64);
+      const bytes = new Uint8Array(byteString.length);
+      for (let i = 0; i < byteString.length; i++) {
+        bytes[i] = byteString.charCodeAt(i);
+      }
+      const blob = new Blob([bytes], { type: mediaType });
+      const url = URL.createObjectURL(blob);
 
       setMessages((prevMessages) =>
         prevMessages.map((message) =>
           message.id === messageId
-            ? { ...message, image: imageData.image, imageLoading: false }
+            ? { ...message, image: { url, mediaType }, imageLoading: false }
             : message
         )
       );
@@ -167,7 +203,8 @@ export function useZombieGame() {
           isStart: false,
           playerStats: gameState,
         },
-        assistantMessageId
+        assistantMessageId,
+        (earlyPrompt) => generateImage(assistantMessageId, earlyPrompt)
       );
 
       const previousAct = gameState.objective?.act ?? 1;
@@ -189,7 +226,6 @@ export function useZombieGame() {
       );
 
       updateGameStats(data);
-      generateImage(assistantMessageId, data.imagePrompt);
     } catch (error) {
       console.error("Error generating story:", error);
     } finally {
@@ -232,6 +268,11 @@ export function useZombieGame() {
           ? Array.from(new Set([...prev.discoveries, ...data.newDiscoveries]))
           : prev.discoveries,
         ending: data.ending ?? prev.ending,
+        itemCooldowns: Object.fromEntries(
+          Object.entries(prev.itemCooldowns)
+            .map(([id, turns]) => [id, Math.max(0, turns - 1)] as const)
+            .filter(([, turns]) => turns > 0)
+        ),
       };
 
       if (newStats.attraction <= 0) {
@@ -249,35 +290,48 @@ export function useZombieGame() {
   };
 
   const buyItem = (item: ShopItem) => {
-    if (gameState.coins >= item.price) {
-      setGameState((prev) => {
-        const newState: GameState = {
-          ...prev,
-          coins: prev.coins - item.price,
-        };
-
-        if (item.consumable) {
-          Object.entries(item.statEffects).forEach(([stat, value]) => {
-            if (value && stat in newState) {
-              const key = stat as keyof StatChanges;
-              const maxKey = `max${
-                key.charAt(0).toUpperCase() + key.slice(1)
-              }` as keyof GameState;
-              (newState[key] as number) = Math.min(
-                newState[maxKey] as number,
-                (newState[key] as number) + value
-              );
-            }
-          });
-        } else {
-          newState.inventory = [...prev.inventory, item];
-        }
-
-        return newState;
-      });
-      return true;
+    if (gameState.coins < item.price) return false;
+    if ((gameState.itemCooldowns[item.id] ?? 0) > 0) return false;
+    if (
+      !item.consumable &&
+      gameState.inventory.some((inv) => inv.id === item.id)
+    ) {
+      return false;
     }
-    return false;
+
+    setGameState((prev) => {
+      const newState: GameState = {
+        ...prev,
+        coins: prev.coins - item.price,
+      };
+
+      if (item.consumable) {
+        Object.entries(item.statEffects).forEach(([stat, value]) => {
+          if (value && stat in newState) {
+            const key = stat as keyof StatChanges;
+            const maxKey = `max${
+              key.charAt(0).toUpperCase() + key.slice(1)
+            }` as keyof GameState;
+            (newState[key] as number) = Math.min(
+              newState[maxKey] as number,
+              (newState[key] as number) + value
+            );
+          }
+        });
+      } else {
+        newState.inventory = [...prev.inventory, item];
+      }
+
+      if (item.cooldownTurns > 0) {
+        newState.itemCooldowns = {
+          ...prev.itemCooldowns,
+          [item.id]: item.cooldownTurns,
+        };
+      }
+
+      return newState;
+    });
+    return true;
   };
 
   const useItem = (itemId: string) => {
@@ -317,6 +371,9 @@ export function useZombieGame() {
   };
 
   const restartGame = () => {
+    messages.forEach((m) => {
+      if (m.image?.url) URL.revokeObjectURL(m.image.url);
+    });
     setMessages([]);
     setInput("");
     setIsLoading(false);

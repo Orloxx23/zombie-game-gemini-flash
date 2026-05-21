@@ -16,7 +16,7 @@ const PROMPT_NODE_ID = process.env.COMFY_PROMPT_NODE_ID ?? "11";
 const PROMPT_INPUT_KEY = process.env.COMFY_PROMPT_INPUT_KEY ?? "prompt";
 const SEED_NODE_ID = process.env.COMFY_SEED_NODE_ID ?? "6";
 
-const POLL_INTERVAL_MS = 2000;
+const POLL_INTERVAL_MS = 1000;
 const POLL_TIMEOUT_MS = 300_000;
 
 type WorkflowNode = {
